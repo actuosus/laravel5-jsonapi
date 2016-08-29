@@ -33,6 +33,11 @@ class MappingFactory extends \NilPortugues\Api\Mapping\MappingFactory
     {
         if (\class_exists($className, true)) {
             $reflection = new ReflectionClass($className);
+
+            // Do not instantiate abstract classes
+            if ($reflection->isAbstract()) {
+                return parent::getClassProperties($className);
+            }
             $value = $reflection->newInstanceWithoutConstructor();
 
             if (\is_subclass_of($value, Model::class, true)) {
